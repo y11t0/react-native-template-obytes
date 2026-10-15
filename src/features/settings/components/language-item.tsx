@@ -1,9 +1,11 @@
 import type { OptionType } from '@/components/ui';
 
 import type { Language } from '@/lib/i18n/resources';
+import i18n from 'i18next';
 import * as React from 'react';
 import { Options, useModal } from '@/components/ui';
 import { translate, useSelectedLanguage } from '@/lib/i18n';
+import { resolveDisplayLanguage } from '@/lib/i18n/resolve-language';
 
 import { SettingsItem } from './settings-item';
 
@@ -27,7 +29,10 @@ export function LanguageItem() {
   );
 
   const selectedLanguage = React.useMemo(
-    () => langs.find(lang => lang.value === language),
+    () => {
+      const current = resolveDisplayLanguage(language, i18n.resolvedLanguage);
+      return langs.find(lang => lang.value === current);
+    },
     [language, langs],
   );
 
